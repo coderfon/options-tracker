@@ -1,8 +1,10 @@
 import { Component, Fragment } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { addOption } from '../../../store/optionsSlice'
 
 const OptionAdd = () => {
 
-    const options = [];
+    const dispatch = useDispatch()
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -22,9 +24,7 @@ const OptionAdd = () => {
             comission: event.target.comission.value
         };
 
-        options.push(option);
-
-        console.log(options);
+        dispatch(addOption(option));
     }
 
     return (

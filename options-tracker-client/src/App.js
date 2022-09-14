@@ -6,8 +6,7 @@ import OptionAdd from './components/options/option-add/option-add.component';
 
 function App() {
   return (
-    <Routes>
-      
+    <Routes>    
       <Route path='/' element={<Navigation />}>
         <Route index element={<Home />}/>     
         <Route path='/add-option' element={<OptionAdd />}/>     
