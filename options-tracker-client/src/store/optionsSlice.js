@@ -9,7 +9,8 @@ const optionsSlice = createSlice({
     initialState,
     reducers: {
         addOption: (state, action) => {
-            state.list.push(action.payload)
+            action.payload.id = state.list.length + 1;
+            state.list.push(action.payload);
         },
     }
 });
