@@ -7,7 +7,8 @@ const Navigation = () => {
             <div className="navbar">
                 <ul>
                     <li><Link to='/'>Home</Link></li>
-                    <li><Link to='/add-option'>Add Option</Link></li>
+                    <li><Link to='/option/add'>Add Option</Link></li>
+                    <li><Link to='/option/import'>Import Option</Link></li>
                 </ul>
             </div>
             <Outlet />

@@ -12,6 +12,7 @@ const Home = () => {
             <h2>TO DO</h2>
             <ul>
                 <li>Import css</li>
+                <li>Bell icon alarm to inform that export is needed</li>
             </ul>
         </div>       
     );

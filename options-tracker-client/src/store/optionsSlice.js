@@ -12,9 +12,24 @@ const optionsSlice = createSlice({
             action.payload.id = state.list.length + 1;
             state.list.push(action.payload);
         },
+        importOptions: (state, action) => {
+            state.list = action.payload;        
+        },
+        updateOption: (state, action) => {
+            state.list = state.list.map((item) => {
+                if(item.id !== action.payload.id) {
+                    return item;
+                }
+
+                return {
+                    ...item,
+                    ...action.payload
+                }
+            })  
+        }
     }
 });
 
-export const { addOption } = optionsSlice.actions
+export const { addOption, importOptions, updateOption } = optionsSlice.actions
 
 export default optionsSlice.reducer

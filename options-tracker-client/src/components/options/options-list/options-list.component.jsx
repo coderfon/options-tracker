@@ -1,5 +1,6 @@
 import React from "react";
 import { Fragment } from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 import './options-list.style.css';
@@ -8,21 +9,14 @@ const OptionsList = () => {
 
     const optionsList = useSelector((state) => state.options.list);
     const optionsListReversed = [...optionsList].reverse().map(a => a);
-
     const [checked, setChecked] = React.useState(true);
 
     const optionsListToRender = checked ? optionsListReversed : optionsList; 
 
-    const handleChange = () => {
-      setChecked(!checked);
-    };
-
-    console.log(optionsList);
-
     const exportCsv = (event) => {
         
         let csvContent = "data:text/csv;charset=utf-8," 
-            + "id,date,ticker,option,action,strike,lastPrice,expiration,contracts,premium,currency,conversionRate,comission\n"
+            + "id,date,ticker,option,action,strike,lastPrice,expiration,contracts,premium,currency,conversionRate,comission,campaign\n"
             + optionsList.map(o => o.id + ","
                 + o.date + ","
                 + o.ticker + ","
@@ -35,17 +29,24 @@ const OptionsList = () => {
                 + o.premium + ","
                 + o.currency + ","
                 + o.conversionRate + ","
-                + o.comission
+                + o.comission + ","
+                + o.campaign
             ).join('\n');
+
+        let fileName = new Date().toJSON().slice(0,16);
 
         var encodedUri = encodeURI(csvContent);
         var link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "my_data.csv");
+        link.setAttribute("download", `options-tracker-${fileName}.csv`);
         document.body.appendChild(link); // Required for FF
         
         link.click(); // This will download the data file named "my_data.csv".
     }
+
+    const handleChange = () => {
+        setChecked(!checked);
+    };
 
     return (
         <Fragment>
@@ -61,34 +62,42 @@ const OptionsList = () => {
                 </label>
             </div>
             <table>
-                <tr>
-                    <th>date</th>
-                    <th>ticker</th>
-                    <th>option</th>
-                    <th>action</th>
-                    <th>lastPrice</th>
-                    <th>expiration</th>
-                    <th>contracts</th>
-                    <th>premium</th>
-                    <th>currency</th>
-                    <th>conversionRate</th>
-                    <th>comission</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>date</th>
+                        <th>ticker</th>
+                        <th>type</th>
+                        <th>action</th>
+                        <th>lastPrice</th>
+                        <th>expiration</th>
+                        <th>contracts</th>
+                        <th>premium</th>
+                        <th>currency</th>
+                        <th>conversionRate</th>
+                        <th>comission</th>
+                        <th>campaign</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {optionsListToRender.map((option) => (
-                <tr key={option.id}>
-                    <td>{option.date}</td>
-                    <td>{option.ticker}</td>
-                    <td>{option.option}</td>
-                    <td>{option.action}</td>
-                    <td>{option.lastPrice}</td>
-                    <td>{option.expiration}</td>
-                    <td>{option.contracts}</td>
-                    <td>{option.premium}</td>
-                    <td>{option.currency}</td>
-                    <td>{option.conversionRate}</td>
-                    <td>{option.comission}</td>
-                </tr>
-                ))}
+                    <tr key={option.id}>
+                        <td>{option.date}</td>
+                        <td>{option.ticker}</td>
+                        <td>{option.type}</td>
+                        <td>{option.action}</td>
+                        <td>{option.lastPrice}</td>
+                        <td>{option.expiration}</td>
+                        <td>{option.contracts}</td>
+                        <td>{option.premium}</td>
+                        <td>{option.currency}</td>
+                        <td>{option.conversionRate}</td>
+                        <td>{option.comission}</td>
+                        <td>{option.campaign}</td>
+                        <td><Link to={`/option/edit/${option.id}`}>Edit</Link></td>
+                    </tr>
+                    ))}
+                </tbody>
             </table>
         </Fragment>
     );
