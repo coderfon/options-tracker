@@ -15,12 +15,15 @@ const OptionsList = () => {
 
     const exportCsv = (event) => {
         
+        console.log('options-list. Export CSV');
+        console.log(optionsList);
+
         let csvContent = "data:text/csv;charset=utf-8," 
             + "id,date,ticker,option,action,strike,lastPrice,expiration,contracts,premium,currency,conversionRate,comission,campaign\n"
             + optionsList.map(o => o.id + ","
                 + o.date + ","
                 + o.ticker + ","
-                + o.option + ","
+                + o.type + ","
                 + o.action + ","
                 + o.strike + ","
                 + o.lastPrice + ","
