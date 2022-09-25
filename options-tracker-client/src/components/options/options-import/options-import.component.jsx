@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { importOptions } from "../../../store/optionsSlice";
+import { CsvToObjectList } from '../../../utils/csv-utils';
 
 
 const OptionsImport = () => {
@@ -19,8 +20,12 @@ const OptionsImport = () => {
             var reader = new FileReader();
             
             reader.onload = function(evt) {
-                const list = processCSV(evt.target.result);
-         
+                const text = evt.target.result;                
+                const list =  CsvToObjectList(text);
+
+                console.log(text);
+                console.log(list);
+                
                 setImportedList(list);
             }
             reader.onerror = function(evt) {

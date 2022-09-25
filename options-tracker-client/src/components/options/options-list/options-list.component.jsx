@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { DateToString } from "../../../utils/date-utils";
+import { ObjectListToCsv } from "../../../utils/csv-utils"
 
 import './options-list.style.css';
 
@@ -16,27 +17,9 @@ const OptionsList = () => {
 
     const exportCsv = (event) => {
         
-        console.log('options-list. Export CSV');
         console.log(optionsList);
 
-        let csvContent = "data:text/csv;charset=utf-8," 
-            + "id,date,ticker,type,action,strike,lastPrice,expiration,contracts,premium,currency,conversionRate,commission,campaign\n"
-            + optionsList.map(o => o.id + ","
-                + o.date + ","
-                + o.ticker + ","
-                + o.type + ","
-                + o.action + ","
-                + o.strike + ","
-                + o.lastPrice + ","
-                + o.expiration + ","
-                + o.contracts + ","
-                + o.premium + ","
-                + o.currency + ","
-                + o.conversionRate + ","
-                + o.commission + ","
-                + o.campaign
-            ).join('\n');
-
+        let csvContent = ObjectListToCsv(optionsList);
         let fileName = new Date().toJSON().slice(0,16);
 
         var encodedUri = encodeURI(csvContent);
