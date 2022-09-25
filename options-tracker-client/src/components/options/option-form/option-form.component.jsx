@@ -9,7 +9,7 @@ const OptionForm = ({option, formCallback}) => {
     const [id, setId] = useState(option?.id);
     const [date, setDate] = useState(option?.date);
     const [ticker, setTicker] = useState(option?.ticker);
-    const [type, setType] = useState(option === undefined ? 'put' : option.type);
+    const [type, setType] = useState(option === undefined ? 'PUT' : option.type);
     const [action, setAction] = useState(option === undefined ? 'buy' : option.action);
     const [strike, setStrike] = useState(option?.strike);
     const [lastPrice, setLastPrice] = useState(option?.lastPrice);
@@ -18,33 +18,31 @@ const OptionForm = ({option, formCallback}) => {
     const [premium, setPremium] = useState(option?.premium);
     const [currency, setCurrency] = useState(option?.currency);
     const [conversionRate, setConversionRate] = useState(option?.conversionRate);
-    const [comission, setComission] = useState(option?.comission);
+    const [commission, setCommission] = useState(option?.commission);
     const [campaign, setCampaign] = useState(option?.campaign);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        console.log(date);
+
         var calculatedDate = new Date(date);
         var calculatedExpiration = new Date(expiration);
-        //const offset = calculatedDate.getTimezoneOffset();
-        //calculatedDate = new Date(calculatedDate.getTime() + offset * 60 * 1000);
-        //calculatedExpiration = new Date(calculatedExpiration.getTime() + offset * 60 * 1000);
-
 
         const editedOption = {
             id: id,
-            date: calculatedDate.toISOString().split('T')[0],
+            date: calculatedDate.getTime(),
             ticker: ticker,
             type: type,
             action: action,
-            strike: strike,
-            lastPrice: lastPrice,
-            expiration: calculatedExpiration.toISOString().split('T')[0],
-            contracts: contracts,
-            premium: premium,
+            strike: parseFloat(strike),
+            lastPrice: parseFloat(lastPrice),
+            expiration: calculatedExpiration.getTime(),
+            contracts: parseInt(contracts),
+            premium: parseFloat(premium),
             currency: currency,
-            conversionRate: conversionRate,
-            comission: comission,
+            conversionRate: parseFloat(conversionRate),
+            commission: parseFloat(commission),
             campaign: campaign
         };
 
@@ -73,14 +71,14 @@ const OptionForm = ({option, formCallback}) => {
                     </div>
                     <div className="form-field">
                         <label>Type</label>
-                        <select name="type" value={type || ''} onChange={e => setType(e.target.value)}>
-                            <option value="put">PUT</option>
-                            <option value="call">CALL</option>
+                        <select name="type" value={type || 'PUT'} onChange={e => setType(e.target.value)}>
+                            <option value="PUT">PUT</option>
+                            <option value="CALL">CALL</option>
                         </select>
                     </div>
                     <div className="form-field">
                         <label>Action</label>
-                        <select name="action" value={action || ''} onChange={e => setAction(e.target.value)}>
+                        <select name="action" value={action || 'buy'} onChange={e => setAction(e.target.value)}>
                             <option value="buy">Buy</option>
                             <option value="sell">Sell</option>
                         </select>
@@ -114,8 +112,8 @@ const OptionForm = ({option, formCallback}) => {
                         <input name="conversionRate" value={conversionRate || ''} type="number" step="any" onChange={e => setConversionRate(e.target.value)} required />
                     </div>
                     <div className="form-field">
-                        <label>Commision</label>
-                        <input name="comission" value={comission || ''} type="number" step="any" onChange={e => setComission(e.target.value)} required />
+                        <label>Commission</label>
+                        <input name="commission" value={commission || ''} type="number" step="any" onChange={e => setCommission(e.target.value)} required />
                     </div>
                     <div className="form-field">
                         <label>Campaign</label>

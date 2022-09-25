@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 import { updateOption } from '../../../store/optionsSlice';
@@ -9,11 +9,12 @@ const OptionEdit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [postId, setPostId] = useState(id);
-
     const dispatch = useDispatch()
     const optionsList = useSelector((state) => state.options.list);
-    const option = optionsList.filter(o => o.id === postId)[0];
+    const option = optionsList.filter(o => o.id === parseInt(id))[0];
+
+    console.log(optionsList);
+    console.log(option);
 
     const formCallback = (option) => {
         console.log('Parent option-edit');

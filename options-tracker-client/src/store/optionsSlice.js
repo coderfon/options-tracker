@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     list: [],
+    pendingExport: false
 }
 
 const optionsSlice = createSlice({
@@ -11,9 +12,14 @@ const optionsSlice = createSlice({
         addOption: (state, action) => {
             action.payload.id = state.list.length + 1;
             state.list.push(action.payload);
+            state.pendingExport = true;
         },
         importOptions: (state, action) => {
-            state.list = action.payload;        
+            state.list = action.payload; 
+            state.pendingExport = false;       
+        },
+        resetPendingExport: (state) => {
+            state.pendingExport = false;
         },
         updateOption: (state, action) => {
             state.list = state.list.map((item) => {
@@ -25,7 +31,8 @@ const optionsSlice = createSlice({
                     ...item,
                     ...action.payload
                 }
-            })  
+            });
+            state.pendingExport = true;  
         }
     }
 });

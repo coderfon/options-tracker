@@ -1,0 +1,17 @@
+div.navbar ul {
+    margin-left: 5px;
+    padding:0;
+}
+
+div.navbar ul > li {
+    display: inline-block;
+    background-color: rgb(117, 186, 255);
+    padding: 5px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+div.navbar ul > li a {
+    color: #fff;
+    text-decoration: none;
+}

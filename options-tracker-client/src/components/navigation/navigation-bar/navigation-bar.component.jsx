@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { Outlet, Link } from "react-router-dom";
 
+import './navigation-bar.style.css';
+
 const Navigation = () => {
     return (
         <Fragment>
