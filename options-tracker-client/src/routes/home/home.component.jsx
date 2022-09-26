@@ -13,6 +13,7 @@ const Home = () => {
             <ul>
                 <li>Import css</li>
                 <li>Bell icon alarm to inform that export is needed</li>
+                <li>Autocomplete for the Campaign textbox</li>
             </ul>
         </div>       
     );

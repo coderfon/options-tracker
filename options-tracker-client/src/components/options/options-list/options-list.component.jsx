@@ -55,6 +55,7 @@ const OptionsList = () => {
                         <th>ticker</th>
                         <th>type</th>
                         <th>action</th>
+                        <th>strike</th>
                         <th>lastPrice</th>
                         <th>expiration</th>
                         <th>contracts</th>
@@ -73,6 +74,7 @@ const OptionsList = () => {
                         <td>{option.ticker}</td>
                         <td>{option.type}</td>
                         <td>{option.action}</td>
+                        <td>{option.strike}</td>
                         <td>{option.lastPrice}</td>
                         <td>{DateToString(new Date(option.expiration))}</td>
                         <td>{option.contracts}</td>
