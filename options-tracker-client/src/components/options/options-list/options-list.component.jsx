@@ -2,6 +2,7 @@ import React from "react";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import PopUp from '../../navigation/popup/popup.component';
 import { DateToString } from "../../../utils/date-utils";
 import { ObjectListToCsv } from "../../../utils/csv-utils"
 
@@ -12,6 +13,7 @@ const OptionsList = () => {
     const optionsList = useSelector((state) => state.options.list);
     const optionsListReversed = [...optionsList].reverse().map(a => a);
     const [checked, setChecked] = useState(true);
+    const [showPopUp, setShowPopUp] = useState(false);
 
     const optionsListToRender = checked ? optionsListReversed : optionsList; 
 
@@ -37,8 +39,10 @@ const OptionsList = () => {
 
     return (
         <Fragment>
+            {showPopUp && <PopUp /> }
             <div>
                 <button onClick={exportCsv}>Export CSV</button>
+                <button onClick={e => setShowPopUp(true)}>Shop PopUp</button>
             </div>
             <div>
                 <label>
