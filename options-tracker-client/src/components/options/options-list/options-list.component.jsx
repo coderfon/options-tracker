@@ -1,5 +1,5 @@
 import React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { DateToString } from "../../../utils/date-utils";
@@ -11,7 +11,7 @@ const OptionsList = () => {
 
     const optionsList = useSelector((state) => state.options.list);
     const optionsListReversed = [...optionsList].reverse().map(a => a);
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = useState(true);
 
     const optionsListToRender = checked ? optionsListReversed : optionsList; 
 
@@ -59,6 +59,7 @@ const OptionsList = () => {
                         <th>lastPrice</th>
                         <th>expiration</th>
                         <th>contracts</th>
+                        <th>contractSize</th>
                         <th>premium</th>
                         <th>currency</th>
                         <th>conversionRate</th>
@@ -78,6 +79,7 @@ const OptionsList = () => {
                         <td>{option.lastPrice}</td>
                         <td>{DateToString(new Date(option.expiration))}</td>
                         <td>{option.contracts}</td>
+                        <td>{option.contractSize}</td>
                         <td>{option.premium}</td>
                         <td>{option.currency}</td>
                         <td>{option.conversionRate}</td>

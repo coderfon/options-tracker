@@ -1,10 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import DatePicker from "react-datepicker"
+import "./option-form.style.css"
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const OptionForm = ({option, formCallback}) => {
+const OptionForm = ({ option, formCallback, cancelCallback }) => {
 
     const [id, setId] = useState(option?.id);
     const [date, setDate] = useState(option?.date);
@@ -15,6 +16,7 @@ const OptionForm = ({option, formCallback}) => {
     const [lastPrice, setLastPrice] = useState(option?.lastPrice);
     const [expiration, setExpiration] = useState(option?.expiration);
     const [contracts, setContracts] = useState(option?.contracts);
+    const [contractSize, setContractSize] = useState(option?.contractSize);
     const [premium, setPremium] = useState(option?.premium);
     const [currency, setCurrency] = useState(option?.currency);
     const [conversionRate, setConversionRate] = useState(option?.conversionRate);
@@ -23,8 +25,6 @@ const OptionForm = ({option, formCallback}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        console.log(date);
 
         var calculatedDate = new Date(date);
         var calculatedExpiration = new Date(expiration);
@@ -39,6 +39,7 @@ const OptionForm = ({option, formCallback}) => {
             lastPrice: parseFloat(lastPrice),
             expiration: calculatedExpiration.getTime(),
             contracts: parseInt(contracts),
+            contractSize: parseInt(contractSize),
             premium: parseFloat(premium),
             currency: currency,
             conversionRate: parseFloat(conversionRate),
@@ -46,24 +47,31 @@ const OptionForm = ({option, formCallback}) => {
             campaign: campaign
         };
 
+        console.log(editedOption);
+
         formCallback(editedOption)
     }
 
     const parseStringToDate = (myDate) => {
-        if(myDate === undefined) {
+        if (myDate === undefined) {
             return '';
         }
-        
+
         return new Date(myDate);
+    }
+
+    const cancelClickHandler = () => {
+        if(cancelCallback)  cancelCallback();
     }
 
     return (
         <fieldset>
-                <legend>Option Form</legend>
-                <form onSubmit={handleSubmit}>
+            <legend>Option Form</legend>
+            <form onSubmit={handleSubmit}>
+                <div className="wrapper">
                     <div className="form-field">
                         <label>Date</label>
-                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(date)} onChange={(date) => setDate(date)} required/>
+                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(date)} onChange={(date) => setDate(date)} required />
                     </div>
                     <div className="form-field">
                         <label>Ticker</label>
@@ -93,11 +101,15 @@ const OptionForm = ({option, formCallback}) => {
                     </div>
                     <div className="form-field">
                         <label>Expiration</label>
-                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(expiration)} onChange={(date) => setExpiration(date)} required/>
+                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(expiration)} onChange={(date) => setExpiration(date)} required />
                     </div>
                     <div className="form-field">
                         <label>Contracts</label>
                         <input name="contracts" value={contracts || ''} type="number" onChange={e => setContracts(e.target.value)} required />
+                    </div>
+                    <div className="form-field">
+                        <label>Contract Size</label>
+                        <input name="contractSize" value={contractSize || ''} type="number" onChange={e => setContractSize(e.target.value)} required />
                     </div>
                     <div className="form-field">
                         <label>Premium</label>
@@ -117,13 +129,13 @@ const OptionForm = ({option, formCallback}) => {
                     </div>
                     <div className="form-field">
                         <label>Campaign</label>
-                        <input name="campaign" value={campaign || ''} type="text"  onChange={e => setCampaign(e.target.value)} required />
+                        <input name="campaign" value={campaign || ''} type="text" onChange={e => setCampaign(e.target.value)} required />
                     </div>
-                    <div>
-                        <button>Save</button>
-                    </div>
-                </form>
-            </fieldset>
+                </div>
+                <button>Save</button>
+            </form>
+            <button onClick={cancelClickHandler}>Cancel</button>
+        </fieldset >
     );
 }
 

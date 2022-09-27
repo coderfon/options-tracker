@@ -1,6 +1,6 @@
 export const ObjectListToCsv = (list) => {
     return "data:text/csv;charset=utf-8,"
-        + "id,date,ticker,type,action,strike,lastPrice,expiration,contracts,premium,currency,conversionRate,commission,campaign\n"
+        + "id,date,ticker,type,action,strike,lastPrice,expiration,contracts,contractSize,premium,currency,conversionRate,commission,campaign\n"
         + list.map(o => o.id + ","
             + o.date + ","
             + o.ticker + ","
@@ -10,6 +10,7 @@ export const ObjectListToCsv = (list) => {
             + o.lastPrice + ","
             + o.expiration + ","
             + o.contracts + ","
+            + o.contractSize + ","
             + o.premium + ","
             + o.currency + ","
             + o.conversionRate + ","
@@ -24,7 +25,7 @@ export const CsvToObjectList = (text) => {
 
     const array = csvRows.map(row => {
 
-        const ints = ["id", "contracts","date","expiration"];
+        const ints = ["id", "contracts","contractSize","date","expiration"];
         const floats = ["commission", "conversionRate", "lastPrice", "premium", "strike"];
         
 
