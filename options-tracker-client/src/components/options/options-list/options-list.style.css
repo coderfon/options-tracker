@@ -7,3 +7,11 @@ table
 table {
     text-align: center;
 }
+
+.listFilter {
+    width: 70px;
+}
+
+table tr.active {
+    background-color: khaki;
+}
