@@ -3,8 +3,11 @@ import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import DatePicker from "react-datepicker"
+import OptionsSummary from '../options-summary/options-summary.component';
+import { CalculateOptionNet, CalculateSummary } from '../../../services/option-summary.service';
 import { DateToString } from "../../../utils/date-utils";
 import { ObjectListToCsv } from "../../../utils/csv-utils"
+import editIcon from '../../../resources/images/edit-icon.png'
 
 import './options-list.style.css';
 
@@ -13,6 +16,7 @@ const OptionsList = () => {
     const optionsList = useSelector((state) => state.options.list);
     const optionsListReversed = [...optionsList].reverse().map(a => a);
     const [reverseList, setReverseList] = useState(true);
+    
     const [actionFilter, setActionFilter] = useState('ALL');
     const [campaignFilter, setCampaignFilter] = useState('');
     const [currencyFilter, setCurrencyFilter] = useState('');
@@ -22,7 +26,6 @@ const OptionsList = () => {
     const [toDateFilter, setToDateFilter] = useState();
     const [fromExpirationFilter, setFromExpirationFilter] = useState();
     const [toExpirationFilter, setToExpirationFilter] = useState();
-    
 
     let today = new Date();
     let optionsListToRender = reverseList ? optionsListReversed : optionsList;
@@ -35,13 +38,13 @@ const OptionsList = () => {
 
     if (campaignFilter) {
         optionsListToRender = optionsListToRender.filter(option => {
-            return option.campaign.includes(campaignFilter);
+            return option.campaign.includes(campaignFilter.toUpperCase());
         });
     }
 
     if (currencyFilter) {
         optionsListToRender = optionsListToRender.filter(option => {
-            return option.currency.includes(currencyFilter);
+            return option.currency.includes(currencyFilter.toUpperCase());
         });
     }
 
@@ -54,7 +57,7 @@ const OptionsList = () => {
 
     if (tickerFilter) {
         optionsListToRender = optionsListToRender.filter(option => {
-            return option.ticker.includes(tickerFilter);
+            return option.ticker.includes(tickerFilter.toUpperCase());
         });
     }
 
@@ -81,6 +84,8 @@ const OptionsList = () => {
             return option.expiration <= toExpirationFilter.getTime();
         });
     }
+
+    const summary = CalculateSummary(optionsListToRender);
 
     const exportCsv = (event) => {
 
@@ -145,7 +150,7 @@ const OptionsList = () => {
                         </th>
                         <th>
                             <input name="tickerFilter"
-                                type="text"
+                                type="search"
                                 className="listFilter"
                                 placeholder="ticker"
                                 onChange={e => setTickerFilter(e.target.value)} />
@@ -200,17 +205,19 @@ const OptionsList = () => {
                                 className="listFilter"
                                 placeholder="currency"
                                 onChange={e => setCurrencyFilter(e.target.value)} />
-                        </th>
-                        <th>conv.Rate</th>
+                        </th>                    
                         <th>comm</th>
+                        <th>net</th>
                         <th>
                             <input name="campaignFilter"
-                                type="text"
+                                value={campaignFilter}
+                                type="search"
                                 className="listFilter"
                                 placeholder="campaign"
                                 onChange={e => setCampaignFilter(e.target.value)} />
                         </th>
-                        <th>actions</th>
+                        <th>conv.Rate</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -225,16 +232,19 @@ const OptionsList = () => {
                             <td>{DateToString(new Date(option.expiration))}</td>
                             <td>{option.contracts}</td>
                             <td>{option.contractSize}</td>
-                            <td>{option.action === "sell" ? option.premium : `[${option.premium}]`}</td>
+                            <td>{option.action === "sell" ? option.premium : option.premium * -1}</td>
                             <td>{option.currency}</td>
-                            <td>{option.conversionRate}</td>
                             <td>{option.commission}</td>
-                            <td>{option.campaign}</td>
-                            <td><Link to={`/option/edit/${option.id}`}>Edit</Link></td>
+                            <td>{CalculateOptionNet(option).toFixed(2)}</td>
+                            <td><span onClick={e => setCampaignFilter(option.campaign)}>{option.campaign}</span></td>
+                            <td>{option.conversionRate}</td>
+                            <td><Link to={`/option/edit/${option.id}`}><img className="edit-icon" src={editIcon} alt="edit"/></Link></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {summary && <OptionsSummary summary={summary} />}
+            
         </Fragment>
     );
 }

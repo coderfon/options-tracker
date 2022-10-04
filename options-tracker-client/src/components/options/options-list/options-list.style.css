@@ -1,7 +1,7 @@
 table 
 {
     margin:10px;
-    width:100%;
+    width:99%;
 }
 
 table {
@@ -14,4 +14,8 @@ table {
 
 table tr.active {
     background-color: khaki;
+}
+
+table img.edit-icon {
+    height: 17px;
 }

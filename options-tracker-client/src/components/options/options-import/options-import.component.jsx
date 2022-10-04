@@ -36,40 +36,6 @@ const OptionsImport = () => {
         }
     }
 
-    const processCSV = (text) => {
-        
-        console.log('options-import. processCSV');
-        console.log(text);
-        const csvHeader = text.slice(0, text.indexOf("\n")).split(",");
-        const csvRows = text.slice(text.indexOf("\n")).split("\n").filter(n => n);
-
-        const array = csvRows.map(row => {
-
-            const ints = ["id", "contracts"];
-            const floats = ["commission", "conversionRate", "lastPrice", "premium", "strike"];
-
-            const values = row.split(',');
-            const obj = csvHeader.reduce((object, header, index) => {
-                if(ints.includes(header)) {
-                    object[header] = parseInt(values[index]);
-                }
-                else if(floats.includes(header)) {
-                    object[header] = parseFloat(values[index]);
-                }
-                else {
-                    object[header] = values[index];
-                }
-                
-                return object;
-              }, {});
-              return obj;
-        });
-
-        console.log(array);
-
-        return (array);
-    }
-
     useEffect(() => {
         dispatch(importOptions(importedList));
         if(importedList.length) {
