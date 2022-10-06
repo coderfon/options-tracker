@@ -1,8 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker"
-import "./option-form.style.css"
 import "react-datepicker/dist/react-datepicker.css";
+import classes from './option-form.module.css';
 
 
 const OptionForm = ({ option, formCallback, formCancelCallback }) => {
@@ -22,6 +22,12 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
     const [conversionRate, setConversionRate] = useState(option?.conversionRate);
     const [commission, setCommission] = useState(option?.commission);
     const [campaign, setCampaign] = useState(option?.campaign);
+
+    const [daysToExpiration, setDaysToExpiration] = useState(0);
+    const [totalRisk, setTotalRisk] = useState(0);
+    const [totalRiskBase, setTotalRiskBase] = useState(0);
+    const [totalBenefit, setTotalBenefit] = useState(0);
+    const [annualRateOfReturn, setAnnualRateOfReturn] = useState(0);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -60,14 +66,49 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
         return new Date(myDate);
     }
 
+    useEffect(() => {
+        if(date != undefined && expiration != undefined) {
+            let span = new Date(expiration).getTime() - new Date(date).getTime();
+            let days = span / 86400000;
+            setDaysToExpiration(days);
+        }
+    }, [date, expiration]);
+
+    useEffect(() => {
+        if(strike != undefined && contracts != undefined && contractSize != undefined) {
+            setTotalRisk(strike * contracts * contractSize);
+        }
+
+    }, [strike, contracts, contractSize]);
+
+    useEffect(() => {
+        if(totalRisk != undefined && conversionRate != null) {
+            setTotalRiskBase((totalRisk / conversionRate).toFixed(2));
+        }
+
+    }, [totalRisk, conversionRate]);
+
+    useEffect(() => {
+        if(premium != undefined && contracts != null && contractSize != null) {
+            setTotalBenefit((action === 'buy' ? -1 : 1) * premium * contracts * contractSize - commission);
+        }
+
+    }, [action, premium, contracts, contractSize, commission]);
+
+    useEffect(() => {
+       if(totalRisk > 0 && daysToExpiration > 0) {
+        setAnnualRateOfReturn((totalBenefit / totalRisk * 100 * 365 / daysToExpiration).toFixed(2));
+       }
+        
+    }, [daysToExpiration, totalRisk, totalBenefit]);
+
     return (
-        <fieldset>
-            <legend>Option Form</legend>
+
             <form onSubmit={handleSubmit}>
-                <div className="wrapper">
+                <div className={classes.wrapper}>
                     <div className="form-field">
                         <label>Date</label>
-                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(date)} onChange={(date) => setDate(date)} required />
+                        <DatePicker name="datefrom" dateFormat="yyyy-MM-dd" selected={parseStringToDate(date)} onChange={(date) => setDate(date)} required />
                     </div>
                     <div className="form-field">
                         <label>Ticker</label>
@@ -75,14 +116,14 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
                     </div>
                     <div className="form-field">
                         <label>Type</label>
-                        <select name="type" value={type || 'PUT'} onChange={e => setType(e.target.value)}>
+                        <select name="type" value={type || 'PUT'} className={classes.formSelect} onChange={e => setType(e.target.value)}>
                             <option value="PUT">PUT</option>
                             <option value="CALL">CALL</option>
                         </select>
                     </div>
                     <div className="form-field">
                         <label>Action</label>
-                        <select name="action" value={action || 'buy'} onChange={e => setAction(e.target.value)}>
+                        <select name="action" value={action || 'buy'} className={classes.formSelect} onChange={e => setAction(e.target.value)}>
                             <option value="buy">Buy</option>
                             <option value="sell">Sell</option>
                         </select>
@@ -128,10 +169,16 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
                         <input name="campaign" value={campaign || ''} type="text" onChange={e => setCampaign(e.target.value)} required />
                     </div>
                 </div>
+                <div className={classes.stats}>
+                    <div>Days to Exp: {daysToExpiration}</div>
+                    <div>Total Benefit: {totalBenefit}</div>
+                    <div>Total Risk: {totalRisk} (Base: {totalRiskBase})</div>
+                    <div>Anualized return: {annualRateOfReturn}%</div>
+                </div>
                 <button type="submit">Save</button>
                 <button type="button" onClick={formCancelCallback}>Cancel</button>
             </form>     
-        </fieldset >
+
     );
 }
 

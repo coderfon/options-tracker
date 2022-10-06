@@ -1,0 +1,14 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.formSelect {
+    width:181px;
+}
+
+.stats {
+    margin:10px;
+    background-color: beige;
+    padding: 5px;
+}
