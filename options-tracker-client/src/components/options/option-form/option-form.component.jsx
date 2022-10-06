@@ -5,7 +5,7 @@ import "./option-form.style.css"
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const OptionForm = ({ option, formCallback, cancelCallback }) => {
+const OptionForm = ({ option, formCallback, formCancelCallback }) => {
 
     const [id, setId] = useState(option?.id);
     const [date, setDate] = useState(option?.date);
@@ -58,10 +58,6 @@ const OptionForm = ({ option, formCallback, cancelCallback }) => {
         }
 
         return new Date(myDate);
-    }
-
-    const cancelClickHandler = () => {
-        if(cancelCallback)  cancelCallback();
     }
 
     return (
@@ -132,9 +128,9 @@ const OptionForm = ({ option, formCallback, cancelCallback }) => {
                         <input name="campaign" value={campaign || ''} type="text" onChange={e => setCampaign(e.target.value)} required />
                     </div>
                 </div>
-                <button>Save</button>
-            </form>
-            <button onClick={cancelClickHandler}>Cancel</button>
+                <button type="submit">Save</button>
+                <button type="button" onClick={formCancelCallback}>Cancel</button>
+            </form>     
         </fieldset >
     );
 }

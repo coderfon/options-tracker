@@ -11,7 +11,7 @@ import editIcon from '../../../resources/images/edit-icon.png'
 
 import './options-list.style.css';
 
-const OptionsList = () => {
+const OptionsList = (props) => {
 
     const optionsList = useSelector((state) => state.options.list);
     const optionsListReversed = [...optionsList].reverse().map(a => a);
@@ -238,7 +238,7 @@ const OptionsList = () => {
                             <td>{CalculateOptionNet(option).toFixed(2)}</td>
                             <td><span onClick={e => setCampaignFilter(option.campaign)}>{option.campaign}</span></td>
                             <td>{option.conversionRate}</td>
-                            <td><Link to={`/option/edit/${option.id}`}><img className="edit-icon" src={editIcon} alt="edit"/></Link></td>
+                            <td><img className="edit-icon" src={editIcon} alt="edit" onClick={e => props.onEditHandler(option.id)}/></td>
                         </tr>
                     ))}
                 </tbody>
