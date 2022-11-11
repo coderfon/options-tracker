@@ -90,7 +90,7 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
 
     useEffect(() => {
         if(premium != undefined && contracts != null && contractSize != null) {
-            setTotalBenefit((action === 'buy' ? -1 : 1) * premium * contracts * contractSize - commission);
+            setTotalBenefit((action === ('buy' || 'xbuy') ? -1 : 1) * premium * contracts * contractSize - commission);
         }
 
     }, [action, premium, contracts, contractSize, commission]);
@@ -126,6 +126,7 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
                         <select name="action" value={action || 'buy'} className={classes.formSelect} onChange={e => setAction(e.target.value)}>
                             <option value="buy">Buy</option>
                             <option value="sell">Sell</option>
+                            <option value="xbuy">xBuy</option>
                         </select>
                     </div>
                     <div className="form-field">

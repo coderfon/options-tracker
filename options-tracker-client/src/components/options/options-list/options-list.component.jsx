@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import DatePicker from "react-datepicker"
 import OptionsSummary from '../options-summary/options-summary.component';
-import { CalculateOptionNet, CalculateSummary } from '../../../services/option-summary.service';
+import { CalculateOptionNet, CalculateSummary, CalculateCampaignSummary } from '../../../services/option-summary.service';
 import { DateToString } from "../../../utils/date-utils";
 import { ObjectListToCsv } from "../../../utils/csv-utils"
 import editIcon from '../../../resources/images/edit-icon.png'
 
 import './options-list.style.css';
+import OptionsCampaignSummary from "../options-campaign-summary/options-campaign-summary.component";
 
 const OptionsList = (props) => {
 
@@ -32,7 +33,7 @@ const OptionsList = (props) => {
 
     if (actionFilter && actionFilter !== 'ALL') {
         optionsListToRender = optionsListToRender.filter(option => {
-            return option.action === actionFilter;
+            return option.action === actionFilter || option.action === `x${actionFilter}`;
         });
     }
 
@@ -86,6 +87,12 @@ const OptionsList = (props) => {
     }
 
     const summary = CalculateSummary(optionsListToRender);
+    let campaignSummary = {};
+    if(campaignFilter) {
+        campaignSummary = CalculateCampaignSummary(optionsList.filter(option => {
+            return option.campaign === campaignFilter;
+        }));
+    }
 
     const exportCsv = (event) => {
 
@@ -244,6 +251,7 @@ const OptionsList = (props) => {
                 </tbody>
             </table>
             {summary && <OptionsSummary summary={summary} />}
+            {campaignSummary && <OptionsCampaignSummary summary={campaignSummary} />}
             
         </Fragment>
     );
