@@ -9,11 +9,11 @@ import OptionsImport from './components/options/options-import/options-import.co
 function App() {
   return (
     <Routes>    
-      <Route path='/' element={<Navigation />}>
+      <Route path='/options-tracker' element={<Navigation />}>
         <Route index element={<Home />}/>     
-        <Route path='/option/add' element={<OptionAdd />}/>    
-        <Route path='/option/edit/:id' element={<OptionEdit />}/>    
-        <Route path='/option/import' element={<OptionsImport />} />
+        <Route path='/options-tracker/option/add' element={<OptionAdd />}/>    
+        <Route path='/options-tracker/option/edit/:id' element={<OptionEdit />}/>    
+        <Route path='/options-tracker/option/import' element={<OptionsImport />} />
       </Route>
     </Routes>
   );
