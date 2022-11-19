@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
 import classes from './option-form.module.css';
+import { ParseStringToDate } from "../../../utils/date-utils";
 
 
 const OptionForm = ({ option, formCallback, formCancelCallback }) => {
@@ -58,16 +59,8 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
         formCallback(editedOption)
     }
 
-    const parseStringToDate = (myDate) => {
-        if (myDate === undefined) {
-            return '';
-        }
-
-        return new Date(myDate);
-    }
-
     useEffect(() => {
-        if(date != undefined && expiration != undefined) {
+        if(date !== undefined && expiration !== undefined) {
             let span = new Date(expiration).getTime() - new Date(date).getTime();
             let days = span / 86400000;
             setDaysToExpiration(days);
@@ -75,21 +68,21 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
     }, [date, expiration]);
 
     useEffect(() => {
-        if(strike != undefined && contracts != undefined && contractSize != undefined) {
+        if(strike !== undefined && contracts !== undefined && contractSize !== undefined) {
             setTotalRisk(strike * contracts * contractSize);
         }
 
     }, [strike, contracts, contractSize]);
 
     useEffect(() => {
-        if(totalRisk != undefined && conversionRate != null) {
+        if(totalRisk !== undefined && conversionRate !== null) {
             setTotalRiskBase((totalRisk / conversionRate).toFixed(2));
         }
 
     }, [totalRisk, conversionRate]);
 
     useEffect(() => {
-        if(premium != undefined && contracts != null && contractSize != null) {
+        if(premium !== undefined && contracts !== null && contractSize !== null) {
             setTotalBenefit((action === ('buy' || 'xbuy') ? -1 : 1) * premium * contracts * contractSize - commission);
         }
 
@@ -108,7 +101,7 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
                 <div className={classes.wrapper}>
                     <div className="form-field">
                         <label>Date</label>
-                        <DatePicker name="datefrom" dateFormat="yyyy-MM-dd" selected={parseStringToDate(date)} onChange={(date) => setDate(date)} required />
+                        <DatePicker name="datefrom" dateFormat="yyyy-MM-dd" autocomplete="off" selected={ParseStringToDate(date)} onChange={(date) => setDate(date)} required />
                     </div>
                     <div className="form-field">
                         <label>Ticker</label>
@@ -139,7 +132,7 @@ const OptionForm = ({ option, formCallback, formCancelCallback }) => {
                     </div>
                     <div className="form-field">
                         <label>Expiration</label>
-                        <DatePicker dateFormat="yyyy-MM-dd" selected={parseStringToDate(expiration)} onChange={(date) => setExpiration(date)} required />
+                        <DatePicker dateFormat="yyyy-MM-dd" autocomplete="off" selected={ParseStringToDate(expiration)} onChange={(date) => setExpiration(date)} required />
                     </div>
                     <div className="form-field">
                         <label>Contracts</label>

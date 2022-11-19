@@ -10,3 +10,11 @@ export const DateToString = (date) => {
     const day = date.toLocaleString("default", { day: "2-digit" });
     return `${year}-${month}-${day}`
 }
+
+export const ParseStringToDate = (myDate) => {
+    if (myDate === undefined) {
+        return '';
+    }
+
+    return new Date(myDate);
+}

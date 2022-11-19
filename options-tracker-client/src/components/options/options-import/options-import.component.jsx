@@ -39,7 +39,7 @@ const OptionsImport = () => {
     useEffect(() => {
         dispatch(importOptions(importedList));
         if(importedList.length) {
-            navigate('/');
+            navigate('/options-tracker');
         }
         
     }, [importedList,dispatch]);

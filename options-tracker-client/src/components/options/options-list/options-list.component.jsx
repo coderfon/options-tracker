@@ -1,6 +1,5 @@
 import React from "react";
 import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import DatePicker from "react-datepicker"
 import OptionsSummary from '../options-summary/options-summary.component';
@@ -94,31 +93,12 @@ const OptionsList = (props) => {
         }));
     }
 
-    const exportCsv = (event) => {
-
-        console.log(optionsList);
-
-        let csvContent = ObjectListToCsv(optionsList);
-        let fileName = new Date().toJSON().slice(0, 16);
-
-        var encodedUri = encodeURI(csvContent);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `options-tracker-${fileName}.csv`);
-        document.body.appendChild(link); // Required for FF
-
-        link.click(); // This will download the data file named "my_data.csv".
-    }
-
     const reverseCheckboxHandler = () => {
         setReverseList(!reverseList);
     };
 
     return (
         <Fragment>
-            <div>
-                <button onClick={exportCsv}>Export CSV</button>
-            </div>
             <div>
                 <label>
                     <input

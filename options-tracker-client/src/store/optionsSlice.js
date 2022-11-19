@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     list: [],
-    pendingExport: false
+    pendingExport: false,
+    showAddOptionDialog: false
 }
 
 const optionsSlice = createSlice({
@@ -21,6 +22,12 @@ const optionsSlice = createSlice({
         resetPendingExport: (state) => {
             state.pendingExport = false;
         },
+        toggleAddOptionDialog: (state) => {
+            state.showAddOptionDialog = !state.showAddOptionDialog;
+        },
+        toggleCalculatorDialog: (state) => {
+            state.showCalculatorDialog = !state.showCalculatorDialog;
+        },
         updateOption: (state, action) => {
             state.list = state.list.map((item) => {
                 if(item.id !== action.payload.id) {
@@ -37,6 +44,6 @@ const optionsSlice = createSlice({
     }
 });
 
-export const { addOption, importOptions, updateOption } = optionsSlice.actions
+export const { addOption, importOptions, resetPendingExport, toggleAddOptionDialog, toggleCalculatorDialog, updateOption } = optionsSlice.actions
 
 export default optionsSlice.reducer
